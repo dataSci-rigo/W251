@@ -1,0 +1,48 @@
+###installing docker-ce
+
+apt-get update
+apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+y
+# add the docker repo    
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+ 
+# install it
+apt-get update
+apt-get install docker-ce
+
+
+
+####installing storage
+apt-get update
+apt-get install automake autotools-dev g++ git libcurl4-openssl-dev libfuse-dev libssl-dev libxml2-dev make pkg-config
+git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+cd s3fs-fuse
+./autogen.sh
+./configure
+make
+make install
+echo "anL68oDzPRFXi95qZ6e8:oSBkRFYiNejDB8IyzEtW82okrLH16TsgoAGCgGXP" > $HOME/.cos_creds
+chmod 600 $HOME/.cos_creds
+cd ..
+mkdir /mybucket
+s3fs moria mybucket -o passwd_file=$HOME/.cos_creds -o sigv2 -o use_path_request_style -o url=https://s3.us.cloud-object-storage.appdomain.cloud
+
+
+
+#######
+sudo docker run --name faces --rm --privileged -e DISPLAY -v /tmp:/tmp -ti motion bash
+sudo docker exec faces python /tmp/vido-to-image.py
+#########
+
+sudo netstat -pna | grep 3000
+
+docker exec -i -t jupyter bash
+

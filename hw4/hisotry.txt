@@ -1,0 +1,41 @@
+    1  cd ~/.ssh
+    2  ls
+    3  cd authorized_keys
+    4  exit
+    5  cd ~/.ssh
+    6  ls
+    7  cat authorized_keys 
+    8  exit
+    9  vi /etc/ssh/sshd_config 
+   10  ssh admin@localhost
+   11  curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
+   12  ibmcloud login
+   13  ssh-keygen -t rsa -f lock-box
+   14  ls
+   15  ibmcloud sl security sshkey-add lockbox --in-file lock-box.pub 
+   16  ibmcloud sl security sshkey-list
+   17  vi lock-box.pub 
+   18  ibmcloud sl vs create --datacenter=lon04 --hostname=v100a --domain=rego.com --image=2263543 --billing=hourly  --network 1000 --key=1474943 --flavor AC2_16X120X100 --san
+   19  ibmcloud sl vs create --datacenter=lon04 --hostname=v100b --domain=rego.com --image=2263543 --billing=hourly  --network 1000 --key=1474943 --flavor AC2_16X120X100 --san
+   20  ibmcloud sl security sshkey-list
+   21  ibmcloud sl vs create --datacenter=lon04 --hostname=v100a --domain=rego.com --image=2263543 --billing=hourly  --network 1000 --key=1474943 --flavor AC2_16X120X100  --san --disk 2TB
+   22  ibmcloud sl vs create --datacenter=lon04 --hostname=v100a --domain=rego.com --image=2263543 --billing=hourly  --network 1000 --key=1474943 --flavor AC2_16X120X100  --san --disk=2TB
+   23  ibmcloud sl vs create --datacenter=lon04 --hostname=v100a --domain=rego.com --image=2263543 --billing=hourly  --network 1000 --key=1474943 --flavor AC2_16X120X100  --san --disk=100 --disk=2000
+   24  ibmcloud sl vs create --datacenter=lon04 --hostname=v100a --domain=rego.com --image=2263543 --billing=hourly  --network 1000 --key=1474943 --flavor AC2_16X120X100  --san
+   25  ssh -i lock-box 158.175.139.203 -l root
+   26  ssh -i lock-box 158.175.139.205 -l root
+   27  ibmcloud sl vs create --datacenter=lon04 --hostname=v100b --domain=rego.com --image=2263543 --billing=hourly  --network 1000 --key=1474943 --flavor AC2_16X120X100 --san
+   28  ls
+   29  ssh -i tx2 158.175.139.203 -l root
+   30  ls
+   31  sudo cat lock-box.pub | ssh root@158.175.139.203 'cat >> ~/.ssh/authorized_keys'
+   32  ssh -i tx2 158.175.139.203 -l root
+   33  ssh -i lock-box 158.175.139.203 -l root
+   34  ssh -i lock-box 158.175.139.205 -l root
+   35  ssh -i lock-box 158.175.139.203 -l root
+   36  exit
+   37  ssh -i lock-box 158.175.139.205 -l root
+   38  exit
+   39  ls
+   40  vi jamba.juice.txt
+   41  history > history.txt

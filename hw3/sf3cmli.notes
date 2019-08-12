@@ -1,0 +1,32 @@
+ibmcloud sl vs create --datacenter=lon06 --hostname=hw04cpu --domain=rego.com --os=UBUNTU_16_64 --flavor C1_8X8X100 --billing=hourly --san --disk=100 --disk=2000 --network 1000  --key=1435227
+
+
+ibmcloud sl security sshkey-list
+l=https://s3.us-east.objectstorage.softlayer.net
+
+
+Access Key ID:zDGc5wtQtGP7DLWPwv5z
+Secret Access Key:JhVdon6aTaC6QCsmbQubs2Ondu00LDYC1xNOlO8w
+
+curl -X "PUT" "https://s3.us-south.cloud-object-storage.appdomain.cloud/moria/cloud_decoded?acl" \
+     -H "x-amz-acl: public-read" \
+     -H "Authorization: Bearer zDGc5wtQtGP7DLWPwv5z:JhVdon6aTaC6QCsmbQubs2Ondu00LDYC1xNOlO8w"
+
+curl -X "PUT" "https://{endpoint}/{bucket-name}/{object-name}?acl" \
+     -H "x-amz-acl: public-read" \
+     -H "Authorization: Bearer {token}"
+
+url -X "PUT" "https://{endpoint}/{bucket-name}/{object-name}?acl" \
+     -H "x-amz-acl: public-read" \
+     -H "Authorization: Bearer {token}"
+
+s3.us-south.cloud-object-storage.appdomain.cloud
+
+curl -X "PUT" "https://s3.eu.cloud-object-storage.appdomain.cloud/moria/cloud_decoded?acl"      -H "x-amz-acl: public-read"      -H "Authorization: zDGc5wtQtGP7DLWPwv5z:JhVdon6aTaC6QCsmbQubs2Ondu00LDYC1xNOlO8w"
+
+
+aws_access_key_id = zDGc5wtQtGP7DLWPwv5z
+aws_secret_access_key = JhVdon6aTaC6QCsmbQubs2Ondu00LDYC1xNOlO8w
+[default]
+aws_access_key_id = zDGc5wtQtGP7DLWPwv5z
+aws_secret_access_key = JhVdon6aTaC6QCsmbQubs2Ondu00LDYC1xNOlO8w

@@ -1,0 +1,86 @@
+apk add py-pip
+  15 apk add python-dev libffi-dev openssl-dev gcc libc-dev make
+  16 pip install paho-mqtt
+  17 apk add git
+  18 git clone https://github.com/eclipse/paho.mqtt.python
+  19 cd paho.mqtt.python
+  20 python setup.py install
+  21 python /tmp/image.mqtt.client.py
+  22 history
+
+docker run --name bucket --network hw03 -ti bucket-connect
+####
+   43  apt-get install automake autotools-dev g++ git libcurl4-openssl-dev libfuse-dev libssl-dev libxml2-dev make pkg-confi
+
+   45  git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+   46  cd s3fs-fuse
+   47  ./autogen.sh
+   48  ./configure
+   49  make
+   50  make install
+   51  echo "anL68oDzPRFXi95qZ6e8:oSBkRFYiNejDB8IyzEtW82okrLH16TsgoAGCgGXP" > $HOME/.cos_creds
+   52  cd ..
+   53  mkdir /mybucket
+
+   59  apt install vi
+   60  vim $HOME/.cos_creds
+   63  chmod 600 $HOME/.cos_creds
+   64  s3fs moria mybucket -o passwd_file=$HOME/.cos_creds -o sigv2 -o use_path_request_style -o url=https://s3.us.cloud-object-storage.appdomain.cloud
+   68  hf -d
+   69  df -h
+
+
+publish(topic, payload=None, qos=0, retain=False)
+
+
+mqttc.connect("iot.eclipse.org")
+mqttc.loop_start()
+
+while True:
+    temperature = sensor.blocking_read()
+    mqttc.publish("paho/temperature", temperature)
+
+
+
+import paho.mqtt.publish as publish
+
+publish.single("paho/test/single", "payload", hostname="iot.eclipse.org")
+
+multiple(msgs, hostname="localhost", port=1883, client_id="", keepalive=60,
+    will=None, auth=None, tls=None, protocol=mqtt.MQTTv311, transport="tcp")
+
+
+import paho.mqtt.publish as publish
+
+msgs = [{'topic':"paho/test/multiple", 'payload':"multiple 1"},
+    ("paho/test/multiple", "multiple 2", 0, False)]
+publish.multiple(msgs, hostname="iot.eclipse.org")
+
+
+
+###publish example
+mqttc.connect("iot.eclipse.org")
+mqttc.loop_start()
+
+while True:
+    temperature = sensor.blocking_read()
+    mqttc.publish("paho/temperature", temperature)
+
+
+
+###subscription
+import paho.mqtt.subscribe as subscribe
+
+msg = subscribe.simple("paho/test/simple", hostname="iot.eclipse.org")
+print("%s %s" % (msg.topic, msg.payload))
+
+
+
+connect examples
+connect_srv(domain, keepalive=60, bind_address="")
+
+connect_async(host, port=1883, keepalive=60, bind_address="")
+
+connect(host, port=1883, keepalive=60, bind_address="")
+
+reconnect_delay_set(min_delay=1, max_delay=120)

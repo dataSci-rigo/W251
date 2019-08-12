@@ -1,0 +1,1 @@
+ibmcloud sl vs create --datacenter=lon06 --hostname=p100a --domain=darknet.com --image=2263543 --billing=hourly  --key=1438503 --key=1438503 --key=1435227 --flavor AC1_8X60X100 --san

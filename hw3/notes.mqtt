@@ -1,0 +1,174 @@
+# Create a bridge:
+docker network create --driver bridge hw03
+# Create an alpine linux - based mosquitto container:
+docker run --name mosquitto --network hw03 -p 1883:1883 -ti alpine sh
+# we are inside the container now
+# install mosquitto
+apk update && apk add mosquitto
+# run mosquitto
+/usr/sbin/mosquitto
+# Press Control-P Control-Q to disconnect from the container
+
+# Create an alpine linux - based message forwarder container:
+docker run --name forwarder --network hw03 -ti alpine sh
+# we are inside the container now
+# install mosquitto-clients
+apk update && apk add mosquitto-clients
+ping mosquitto
+# this should work - note that we are referring to the mosquitto container by name
+mosquitto_sub -h mosquitto -t <some topic>
+# the above should block until some messages arrive
+# Press Control-P Control-Q to disconnect from the container
+
+
+
+
+mosquitto_sub -t applications/in/+/public/# -h <ip address of the MQTT broker>
+
+
+def on_message(client,userdata, msg):
+
+#    print("message received!")
+   remote_mqttclient.publish(REMOTE_MQTT_TOPIC, payload=msg.payload, qos=0, retain=False)
+
+
+docker run --init -it --rm efrecon/mqtt-client sub -h test.mosquitto.org -t "#" -v
+
+
+docker exec -ti mosquitto mosquitto_pub -h 127.0.0.1  -t 'hello' -m 'world'
+
+
+
+docker exec -ti mosquitto mosquitto_sub -h 127.0.0.1 -v -t '#'
+
+### containers
+
+
+
+###Ip config in alpine
+ip addr show eth0
+ip route
+
+
+
+
+##docker connection to docker0
+sudo brctl show
+
+###routing to internet
+sysctl net.ipv4.conf.all.forwarding=1
+sudo iptables -P FORWARD ACCEPT
+###install paho
+pip install paho-mqtt
+git clone https://github.com/eclipse/paho.mqtt.python
+cd paho.mqtt.python
+python setup.py install
+
+sudo docker run -ti \
+  -v /tmp/mosquitto/etc/mosquitto:/etc/mosquitto \
+  -v /tmp/mosquitto/etc/mosquitto.d:/etc/mosquitto.d \
+  -v /tmp/mosquitto/var/lib/mosquitto:/var/lib/mosquitto \
+  -v /tmp/mosquitto/auth-plug.conf:/etc/mosquitto.d/auth-plugin.conf \
+  --name mqtt \
+  -p 1883:1883 \
+  -p 9883:9883 \
+  jllopis/mosquitto:v1.5.5
+
+### intall python
+apk add --update \
+    python \
+    python-dev \
+    py-pip \
+    build-base \
+  && pip install virtualenv \
+  && rm -rf /var/cache/apk/*
+
+
+#!/usr/bin/python
+
+import mosquitto
+
+client = mosquitto.Mosquitto("image-send")
+client.connect("127.0.0.1")
+
+f = open("data")
+imagestring = f.read()
+byteArray = bytes(imagestring)
+client.publish("photo", byteArray ,0)
+
+#!/usr/bin/python
+
+import time
+import mosquitto
+
+def on_message(mosq, obj, msg):
+  with open('iris.jpg', 'wb') as fd:
+    fd.write(msg.payload)
+
+
+client = mosquitto.Mosquitto("image-rec")
+client.connect("127.0.0.1")
+client.subscribe("photo",0)
+client.on_message = on_message
+
+while True:
+   client.loop(15)
+   time.sleep(2)
+
+
+#!/usr/bin/python
+
+import mosquitto
+
+def on_publish(mosq, userdata, mid):
+  # Disconnect after our message has been sent.
+  mosq.disconnect()
+
+# Specifying a client id here could lead to collisions if you have multiple
+# clients sending. Either generate a random id, or use:
+#client = mosquitto.Mosquitto()
+client = mosquitto.Mosquitto("image-send")
+client.on_publish = on_publish
+client.connect("127.0.0.1")
+
+f = open("data")
+imagestring = f.read()
+byteArray = bytes(imagestring)
+client.publish("photo", byteArray ,0)
+# If the image is large, just calling publish() won't guarantee that all 
+# of the message is sent. You should call one of the mosquitto.loop*()
+# functions to ensure that happens. loop_forever() does this for you in a
+# blocking call. It will automatically reconnect if disconnected by accident
+# and will return after we call disconnect() above.
+client.loop_forever()
+
+import paho.mqtt.client as mqtt
+
+# The callback for when the client receives a CONNACK response from the server.
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
+
+    # Subscribing in on_connect() means that if we lose the connection and
+    # reconnect then subscriptions will be renewed.
+    client.subscribe("$SYS/#")
+def on_disconnect(client, userdata, rc):
+    if rc != 0:
+        print("Unexpected disconnection.")
+
+
+# The callback for when a PUBLISH message is received from the server.
+def on_message(client, userdata, msg):
+    print(msg.topic+" "+str(msg.payload))
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+mqttc.on_disconnect = on_disconnect
+
+client.connect("iot.eclipse.org", 1883, 60)
+
+# Blocking call that processes network traffic, dispatches callbacks and
+# handles reconnecting.
+# Other loop*() functions are available that give a threaded interface and a
+# manual interface.
+client.loop_forever()
