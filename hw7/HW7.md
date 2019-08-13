@@ -7,7 +7,7 @@ Face Recognition with dilib "Built using dlib's state-of-the-art face recognitio
 It only captures front facing faces(+/-45 degs). It is good enough for certain applications.
 
 ##### What framerate does this method achieve on the Jetson? Where is the bottleneck?
-It produces images with no delay. It seem faster than opencv.
+It produces images with no delay. It seem much faster than opencv, which is already fast.
 
 ##### Which is a better quality detector: the OpenCV or yours?
-Mine is very quality.
+Mine is better quality.
